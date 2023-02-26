@@ -19,7 +19,7 @@ func Load() {
 		log.Fatal("erro ao carregar as envs ", err)
 	}
 
-	ConnectionUrl = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+	ConnectionUrl = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),
