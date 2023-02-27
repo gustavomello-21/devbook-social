@@ -22,7 +22,7 @@ func (u user) Create(user models.User) (uint64, error) {
 		log.Fatal(err)
 	}
 	defer statement.Close()
-	result, err := statement.Exec(user.Fullname, user.Nick, user.Email, user.Passord)
+	result, err := statement.Exec(user.Fullname, user.Nick, user.Email, user.Password)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -100,6 +100,26 @@ func (u *user) Delete(targetId int) error {
 	}
 
 	_, err = statement.Exec(targetId)
+	if err != nil {
+	}
 
-	return err
+	return nil
+}
+
+func (u *user) FindByEmail(email string) (models.User, error) {
+	rows, err := u.db.Query("SELECT id, email, password FROM users WHERE email = ?", email)
+	if err != nil {
+		return models.User{}, err
+	}
+	defer rows.Close()
+
+	var user models.User
+
+	for rows.Next() {
+		if err = rows.Scan(&user.ID, &user.Email, &user.Password); err != nil {
+			return models.User{}, err
+		}
+	}
+
+	return user, nil
 }
